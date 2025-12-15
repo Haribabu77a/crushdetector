@@ -117,7 +117,13 @@
             transform: scale(1.05);
         }
 
-        .quiz-container, .flames-container, .contact-container {
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .chat-container, .flames-container, .contact-container {
             display: none;
             background: white;
             border-radius: 15px;
@@ -127,53 +133,114 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
 
-        .question {
-            margin: 1.5rem 0;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        .question h4 {
-            color: #667eea;
-            margin-bottom: 1rem;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .options label {
-            padding: 0.8rem;
-            background: white;
+        .chat-box {
+            height: 500px;
+            overflow-y: auto;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 10px;
+            max-width: 80%;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.ai {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-right: auto;
+        }
+
+        .message.user {
+            background: #e3f2fd;
+            color: #333;
+            margin-left: auto;
+        }
+
+        .message.typing {
+            background: #667eea;
+            color: white;
+            margin-right: auto;
+        }
+
+        .typing-indicator {
+            display: inline-block;
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 2px;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .input-area {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .quick-reply-btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 0.9rem;
         }
 
-        .options label:hover {
-            border-color: #667eea;
-            background: #f0f4ff;
+        .quick-reply-btn:hover {
+            background: #667eea;
+            color: white;
         }
 
-        .options input[type="radio"] {
-            margin-right: 0.5rem;
-        }
-
-        .result {
-            background: #f0f4ff;
-            padding: 2rem;
-            border-radius: 10px;
-            margin-top: 2rem;
-            border-left: 5px solid #667eea;
-        }
-
-        .result h3 {
-            color: #667eea;
-            margin-bottom: 1rem;
+        .back-btn {
+            background: #6c757d;
+            margin-right: 1rem;
         }
 
         .flames-input {
@@ -203,9 +270,17 @@
             resize: vertical;
         }
 
-        .back-btn {
-            background: #6c757d;
-            margin-right: 1rem;
+        .result {
+            background: #f0f4ff;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            border-left: 5px solid #667eea;
+        }
+
+        .result h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
         }
 
         .hidden {
@@ -230,10 +305,10 @@
             </div>
 
             <div class="features">
-                <div class="feature-card" onclick="startQuiz()">
-                    <h3>💘 Love Detector Quiz</h3>
-                    <p>Answer 10 carefully crafted questions about your interactions with her. Get a detailed analysis based on her behavior and actions towards you.</p>
-                    <button class="btn">Start Quiz</button>
+                <div class="feature-card" onclick="startChat()">
+                    <h3>💘 AI Love Advisor</h3>
+                    <p>Chat with our AI advisor that asks intelligent, personalized questions based on your specific situation. Get real-time analysis and advice tailored just for you!</p>
+                    <button class="btn">Start Conversation</button>
                 </div>
 
                 <div class="feature-card" onclick="startFlames()">
@@ -244,106 +319,20 @@
             </div>
         </div>
 
-        <div id="quiz" class="quiz-container">
-            <h2 style="color: #667eea; text-align: center;">Love Detector Quiz</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 2rem;">Answer honestly for the most accurate results!</p>
+        <div id="chat" class="chat-container">
+            <h2 style="color: #667eea; text-align: center;">💘 AI Love Advisor</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 1rem;">Have a genuine conversation about your situation</p>
             
-            <form id="quizForm">
-                <div class="question">
-                    <h4>1. Does she initiate conversations with you?</h4>
-                    <div class="options">
-                        <label><input type="radio" name="q1" value="2" required> Yes, frequently</label>
-                        <label><input type="radio" name="q1" value="1"> Sometimes</label>
-                        <label><input type="radio" name="q1" value="0"> Rarely or never</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h4>2. Does she make eye contact and smile when talking to you?</h4>
-                    <div class="options">
-                        <label><input type="radio" name="q2" value="2" required> Yes, always</label>
-                        <label><input type="radio" name="q2" value="1"> Sometimes</label>
-                        <label><input type="radio" name="q2" value="0"> Rarely</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h4>3. Does she remember small details about things you've told her?</h4>
-                    <div class="options">
-                        <label><input type="radio" name="q3" value="2" required> Yes, she remembers a lot</label>
-                        <label><input type="radio" name="q3" value="1"> Some things</label>
-                        <label><input type="radio" name="q3" value="0"> Not really</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h4>4. Does she try to spend time with you alone?</h4>
-                    <div class="options">
-                        <label><input type="radio" name="q4" value="2" required> Yes, she suggests hanging out</label>
-                        <label><input type="radio" name="q4" value="1"> Only in groups</label>
-                        <label><input type="radio" name="q4" value="0"> She avoids it</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h4>5. Does she laugh at your jokes, even the not-so-funny ones?</h4>
-                    <div class="options">
-                        <label><input type="radio" name="q5" value="2" required> Yes, she finds me funny</label>
-                        <label><input type="radio" name="q5" value="1"> Sometimes</label>
-                        <label><input type="radio" name="q5" value="0"> Not really</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h4>6. Does she seem interested in your life and ask questions about you?</h4>
-                    <div class="options">
-                        <label><input type="radio" name="q6" value="2" required> Yes, frequently</label>
-                        <label><input type="radio" name="q6" value="1"> Occasionally</label>
-                        <label><input type="radio" name="q6" value="0"> Rarely</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h4>7. Does she find excuses to touch you (playful hits, touching your arm, etc.)?</h4>
-                    <div class="options">
-                        <label><input type="radio" name="q7" value="2" required> Yes, often</label>
-                        <label><input type="radio" name="q7" value="1"> Sometimes</label>
-                        <label><input type="radio" name="q7" value="0"> Never</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h4>8. Does she respond to your messages quickly and keep the conversation going?</h4>
-                    <div class="options">
-                        <label><input type="radio" name="q8" value="2" required> Yes, she's very responsive</label>
-                        <label><input type="radio" name="q8" value="1"> Sometimes delays but responds</label>
-                        <label><input type="radio" name="q8" value="0"> Takes forever or gives short replies</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h4>9. Does she seem a bit nervous or fidgety around you?</h4>
-                    <div class="options">
-                        <label><input type="radio" name="q9" value="2" required> Yes, I notice this</label>
-                        <label><input type="radio" name="q9" value="1"> Not sure</label>
-                        <label><input type="radio" name="q9" value="0"> She seems very relaxed/casual</label>
-                    </div>
-                </div>
-
-                <div class="question">
-                    <h4>10. Does she show signs of jealousy when you talk about other girls?</h4>
-                    <div class="options">
-                        <label><input type="radio" name="q10" value="2" required> Yes, definitely</label>
-                        <label><input type="radio" name="q10" value="1"> Maybe, subtle signs</label>
-                        <label><input type="radio" name="q10" value="0"> Not at all</label>
-                    </div>
-                </div>
-
-                <button type="button" class="btn back-btn" onclick="showHome()">Back</button>
-                <button type="submit" class="btn">Get Results</button>
-            </form>
-
-            <div id="quizResult" class="result hidden"></div>
+            <div class="chat-box" id="chatBox"></div>
+            
+            <div class="quick-replies" id="quickReplies"></div>
+            
+            <div class="input-area">
+                <input type="text" id="userInput" placeholder="Type your response..." disabled>
+                <button class="btn" id="sendBtn" onclick="sendMessage()" disabled>Send</button>
+            </div>
+            
+            <button type="button" class="btn back-btn" onclick="showHome()" style="margin-top: 1rem;">Back to Home</button>
         </div>
 
         <div id="flames" class="flames-container">
@@ -381,20 +370,41 @@
     </div>
 
     <script>
+        let conversationHistory = [];
+        let awaitingResponse = false;
+
         function showHome() {
             document.getElementById('home').style.display = 'block';
-            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('chat').style.display = 'none';
             document.getElementById('flames').style.display = 'none';
             document.getElementById('contact').style.display = 'none';
-            document.getElementById('quizResult').classList.add('hidden');
             document.getElementById('flamesResult').classList.add('hidden');
         }
 
-        function startQuiz() {
+        function startChat() {
             document.getElementById('home').style.display = 'none';
-            document.getElementById('quiz').style.display = 'block';
-            document.getElementById('quizForm').reset();
-            document.getElementById('quizResult').classList.add('hidden');
+            document.getElementById('chat').style.display = 'block';
+            document.getElementById('chatBox').innerHTML = '';
+            document.getElementById('quickReplies').innerHTML = '';
+            conversationHistory = [];
+            awaitingResponse = false;
+            
+            // Enable input
+            document.getElementById('userInput').disabled = false;
+            document.getElementById('sendBtn').disabled = false;
+            
+            // Start conversation
+            addAIMessage("Hey there! 👋 I'm your AI Love Advisor. I'm here to help you understand your relationship situation better. Let's have a real conversation about what's going on.");
+            
+            setTimeout(() => {
+                addAIMessage("First, let me get to know your situation a bit. How long have you known this girl?");
+                showQuickReplies([
+                    "Just met her recently",
+                    "A few weeks to months",
+                    "Several months to a year",
+                    "More than a year"
+                ]);
+            }, 1500);
         }
 
         function startFlames() {
@@ -407,84 +417,143 @@
 
         function showContact() {
             document.getElementById('home').style.display = 'none';
-            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('chat').style.display = 'none';
             document.getElementById('flames').style.display = 'none';
             document.getElementById('contact').style.display = 'block';
         }
 
-        document.getElementById('quizForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        function addMessage(message, isUser) {
+            const chatBox = document.getElementById('chatBox');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'ai'}`;
+            messageDiv.textContent = message;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function addAIMessage(message) {
+            addMessage(message, false);
+        }
+
+        function addUserMessage(message) {
+            addMessage(message, true);
+            conversationHistory.push({role: 'user', content: message});
+        }
+
+        function showTypingIndicator() {
+            const chatBox = document.getElementById('chatBox');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message typing';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+            chatBox.appendChild(typingDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
+        }
+
+        function showQuickReplies(replies) {
+            const container = document.getElementById('quickReplies');
+            container.innerHTML = '';
+            replies.forEach(reply => {
+                const btn = document.createElement('button');
+                btn.className = 'quick-reply-btn';
+                btn.textContent = reply;
+                btn.onclick = () => handleQuickReply(reply);
+                container.appendChild(btn);
+            });
+        }
+
+        function handleQuickReply(reply) {
+            document.getElementById('quickReplies').innerHTML = '';
+            addUserMessage(reply);
+            processUserResponse(reply);
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
             
-            let score = 0;
-            for (let i = 1; i <= 10; i++) {
-                const answer = document.querySelector(`input[name="q${i}"]:checked`);
-                if (answer) {
-                    score += parseInt(answer.value);
+            if (!message || awaitingResponse) return;
+            
+            input.value = '';
+            addUserMessage(message);
+            processUserResponse(message);
+        }
+
+        async function processUserResponse(userMessage) {
+            awaitingResponse = true;
+            document.getElementById('userInput').disabled = true;
+            document.getElementById('sendBtn').disabled = true;
+            
+            showTypingIndicator();
+
+            // Build the conversation context
+            const systemPrompt = `You are a relationship advisor AI chatbot helping someone understand if a girl is interested in them romantically. 
+
+Your role:
+- Ask intelligent, specific follow-up questions based on their answers
+- Ask about real, concrete instances and behaviors (e.g., "Can you give me a specific example of when she initiated a conversation?")
+- Be conversational, empathetic, and natural
+- Adapt your questions based on their situation
+- After 6-8 questions, provide a detailed analysis with specific advice
+
+Analysis framework:
+- Strong interest (16+ positive signals): She's likely into you
+- Moderate interest (11-15 signals): There's potential, mixed signals
+- Friend zone (6-10 signals): Likely sees you as a friend
+- Not interested (0-5 signals): No romantic interest
+
+Keep responses concise (2-3 sentences max) and always end with a clear, specific question. Be supportive and honest.`;
+
+            const messages = [
+                { role: "user", content: systemPrompt },
+                ...conversationHistory.slice(-10), // Last 10 messages for context
+                { role: "user", content: userMessage }
+            ];
+
+            try {
+                const response = await fetch("https://api.anthropic.com/v1/messages", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        model: "claude-sonnet-4-20250514",
+                        max_tokens: 1000,
+                        messages: messages
+                    })
+                });
+
+                const data = await response.json();
+                removeTypingIndicator();
+
+                if (data.content && data.content[0]) {
+                    const aiResponse = data.content[0].text;
+                    conversationHistory.push({role: 'assistant', content: aiResponse});
+                    addAIMessage(aiResponse);
+                } else {
+                    addAIMessage("I'm having trouble processing that. Could you rephrase?");
                 }
+            } catch (error) {
+                removeTypingIndicator();
+                addAIMessage("Sorry, I encountered an error. Let's continue - could you tell me more about your situation?");
             }
 
-            let resultHTML = '';
-            
-            if (score >= 16) {
-                resultHTML = `
-                    <h3>💖 She's Into You! (Score: ${score}/20)</h3>
-                    <p><strong>Great news!</strong> Based on her behavior, there's a strong indication that she has romantic feelings for you.</p>
-                    <p><strong>What to do next:</strong></p>
-                    <ul style="margin-left: 2rem; line-height: 1.8;">
-                        <li>Take the initiative and ask her out on a proper date</li>
-                        <li>Be confident but respectful in expressing your feelings</li>
-                        <li>Create opportunities for one-on-one time together</li>
-                        <li>Pay attention to her responses and reciprocate her interest</li>
-                        <li>Don't wait too long - strike while the iron is hot!</li>
-                    </ul>
-                `;
-            } else if (score >= 11) {
-                resultHTML = `
-                    <h3>💛 There's Potential! (Score: ${score}/20)</h3>
-                    <p><strong>Mixed signals detected.</strong> She might be interested but unsure, or you're in the transition phase between friendship and something more.</p>
-                    <p><strong>What to do next:</strong></p>
-                    <ul style="margin-left: 2rem; line-height: 1.8;">
-                        <li>Spend more quality time together to strengthen your bond</li>
-                        <li>Be more intentional about showing your interest</li>
-                        <li>Create romantic moments and see how she responds</li>
-                        <li>Communicate openly about your feelings when the time feels right</li>
-                        <li>Watch for changes in her behavior - is she warming up or pulling back?</li>
-                    </ul>
-                    <p><strong>Reason for change:</strong> She might need more time to develop feelings, or she's testing the waters to see if you're genuinely interested.</p>
-                `;
-            } else if (score >= 6) {
-                resultHTML = `
-                    <h3>💙 Friend Zone Territory (Score: ${score}/20)</h3>
-                    <p><strong>Be honest with yourself.</strong> She likely sees you as a friend rather than a romantic interest at this point.</p>
-                    <p><strong>What to do next:</strong></p>
-                    <ul style="margin-left: 2rem; line-height: 1.8;">
-                        <li>Accept the friendship and cherish it for what it is</li>
-                        <li>If you want more, try creating romantic tension gradually</li>
-                        <li>Work on yourself - confidence and self-improvement are attractive</li>
-                        <li>Consider if you can handle being just friends, or if you need distance</li>
-                        <li>Don't force it - genuine connections can't be manufactured</li>
-                    </ul>
-                    <p><strong>Important:</strong> Friendships are valuable too. Sometimes the best relationships start as friendships, but don't put your life on hold waiting.</p>
-                `;
-            } else {
-                resultHTML = `
-                    <h3>💔 Not Interested (Score: ${score}/20)</h3>
-                    <p><strong>Time for truth.</strong> Based on these indicators, she doesn't appear to have romantic interest in you.</p>
-                    <p><strong>What to do next:</strong></p>
-                    <ul style="margin-left: 2rem; line-height: 1.8;">
-                        <li>Respect her feelings and don't push for something that isn't there</li>
-                        <li>Give yourself space to process and move on emotionally</li>
-                        <li>Focus on your own growth and happiness</li>
-                        <li>Open yourself up to meeting new people</li>
-                        <li>Remember: The right person will make their interest clear</li>
-                    </ul>
-                    <p><strong>Remember:</strong> This isn't about your worth - it's about compatibility. Someone else will appreciate all the qualities she didn't see.</p>
-                `;
-            }
+            awaitingResponse = false;
+            document.getElementById('userInput').disabled = false;
+            document.getElementById('sendBtn').disabled = false;
+            document.getElementById('userInput').focus();
+        }
 
-            document.getElementById('quizResult').innerHTML = resultHTML;
-            document.getElementById('quizResult').classList.remove('hidden');
-            document.getElementById('quizResult').scrollIntoView({ behavior: 'smooth' });
+        // Allow Enter key to send message
+        document.getElementById('userInput')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !awaitingResponse) {
+                sendMessage();
+            }
         });
 
         function calculateFlames() {
