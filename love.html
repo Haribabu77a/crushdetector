@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crush💖 or Crushed💔</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #764ba2;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            color: white;
+            padding: 3rem 1rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .quiz-container, .flames-container, .contact-container {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .question {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .question h4 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .options label {
+            padding: 0.8rem;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .options label:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+
+        .result {
+            background: #f0f4ff;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            border-left: 5px solid #667eea;
+        }
+
+        .result h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .flames-input {
+            margin: 1rem 0;
+        }
+
+        .flames-input input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .contact-form textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .back-btn {
+            background: #6c757d;
+            margin-right: 1rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#" onclick="showHome()">Home</a></li>
+            <li><a href="#" onclick="showContact()">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div id="home" class="home-section">
+            <div class="hero">
+                <h1>Crush 💖 or Crushed 💔</h1>
+                <p>Discover the truth about your relationship status!</p>
+                <p style="font-size: 1rem; opacity: 0.9;">Get clarity on whether she sees you as a friend or something more</p>
+            </div>
+
+            <div class="features">
+                <div class="feature-card" onclick="startQuiz()">
+                    <h3>💘 Love Detector Quiz</h3>
+                    <p>Answer 10 carefully crafted questions about your interactions with her. Get a detailed analysis based on her behavior and actions towards you.</p>
+                    <button class="btn">Start Quiz</button>
+                </div>
+
+                <div class="feature-card" onclick="startFlames()">
+                    <h3>🔥 FLAMES Game</h3>
+                    <p>The classic FLAMES relationship calculator! Enter both names and discover what fate has in store. Just for fun and personal satisfaction!</p>
+                    <button class="btn">Play FLAMES</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="quiz" class="quiz-container">
+            <h2 style="color: #667eea; text-align: center;">Love Detector Quiz</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem;">Answer honestly for the most accurate results!</p>
+            
+            <form id="quizForm">
+                <div class="question">
+                    <h4>1. Does she initiate conversations with you?</h4>
+                    <div class="options">
+                        <label><input type="radio" name="q1" value="2" required> Yes, frequently</label>
+                        <label><input type="radio" name="q1" value="1"> Sometimes</label>
+                        <label><input type="radio" name="q1" value="0"> Rarely or never</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h4>2. Does she make eye contact and smile when talking to you?</h4>
+                    <div class="options">
+                        <label><input type="radio" name="q2" value="2" required> Yes, always</label>
+                        <label><input type="radio" name="q2" value="1"> Sometimes</label>
+                        <label><input type="radio" name="q2" value="0"> Rarely</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h4>3. Does she remember small details about things you've told her?</h4>
+                    <div class="options">
+                        <label><input type="radio" name="q3" value="2" required> Yes, she remembers a lot</label>
+                        <label><input type="radio" name="q3" value="1"> Some things</label>
+                        <label><input type="radio" name="q3" value="0"> Not really</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h4>4. Does she try to spend time with you alone?</h4>
+                    <div class="options">
+                        <label><input type="radio" name="q4" value="2" required> Yes, she suggests hanging out</label>
+                        <label><input type="radio" name="q4" value="1"> Only in groups</label>
+                        <label><input type="radio" name="q4" value="0"> She avoids it</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h4>5. Does she laugh at your jokes, even the not-so-funny ones?</h4>
+                    <div class="options">
+                        <label><input type="radio" name="q5" value="2" required> Yes, she finds me funny</label>
+                        <label><input type="radio" name="q5" value="1"> Sometimes</label>
+                        <label><input type="radio" name="q5" value="0"> Not really</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h4>6. Does she seem interested in your life and ask questions about you?</h4>
+                    <div class="options">
+                        <label><input type="radio" name="q6" value="2" required> Yes, frequently</label>
+                        <label><input type="radio" name="q6" value="1"> Occasionally</label>
+                        <label><input type="radio" name="q6" value="0"> Rarely</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h4>7. Does she find excuses to touch you (playful hits, touching your arm, etc.)?</h4>
+                    <div class="options">
+                        <label><input type="radio" name="q7" value="2" required> Yes, often</label>
+                        <label><input type="radio" name="q7" value="1"> Sometimes</label>
+                        <label><input type="radio" name="q7" value="0"> Never</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h4>8. Does she respond to your messages quickly and keep the conversation going?</h4>
+                    <div class="options">
+                        <label><input type="radio" name="q8" value="2" required> Yes, she's very responsive</label>
+                        <label><input type="radio" name="q8" value="1"> Sometimes delays but responds</label>
+                        <label><input type="radio" name="q8" value="0"> Takes forever or gives short replies</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h4>9. Does she seem a bit nervous or fidgety around you?</h4>
+                    <div class="options">
+                        <label><input type="radio" name="q9" value="2" required> Yes, I notice this</label>
+                        <label><input type="radio" name="q9" value="1"> Not sure</label>
+                        <label><input type="radio" name="q9" value="0"> She seems very relaxed/casual</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h4>10. Does she show signs of jealousy when you talk about other girls?</h4>
+                    <div class="options">
+                        <label><input type="radio" name="q10" value="2" required> Yes, definitely</label>
+                        <label><input type="radio" name="q10" value="1"> Maybe, subtle signs</label>
+                        <label><input type="radio" name="q10" value="0"> Not at all</label>
+                    </div>
+                </div>
+
+                <button type="button" class="btn back-btn" onclick="showHome()">Back</button>
+                <button type="submit" class="btn">Get Results</button>
+            </form>
+
+            <div id="quizResult" class="result hidden"></div>
+        </div>
+
+        <div id="flames" class="flames-container">
+            <h2 style="color: #667eea; text-align: center;">🔥 FLAMES Game 🔥</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem;">Enter your names to discover your relationship fate!</p>
+            
+            <div class="flames-input">
+                <label>Your Name:</label>
+                <input type="text" id="name1" placeholder="Enter your name">
+            </div>
+            
+            <div class="flames-input">
+                <label>Her Name:</label>
+                <input type="text" id="name2" placeholder="Enter her name">
+            </div>
+
+            <button type="button" class="btn back-btn" onclick="showHome()">Back</button>
+            <button type="button" class="btn" onclick="calculateFlames()">Calculate FLAMES</button>
+
+            <div id="flamesResult" class="result hidden"></div>
+        </div>
+
+        <div id="contact" class="contact-container">
+            <h2 style="color: #667eea; text-align: center;">Contact Us</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem;">Have questions or feedback? We'd love to hear from you!</p>
+            
+            <form class="contact-form" onsubmit="submitContact(event)">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Your Message" required></textarea>
+                <button type="button" class="btn back-btn" onclick="showHome()">Back</button>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showHome() {
+            document.getElementById('home').style.display = 'block';
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('flames').style.display = 'none';
+            document.getElementById('contact').style.display = 'none';
+            document.getElementById('quizResult').classList.add('hidden');
+            document.getElementById('flamesResult').classList.add('hidden');
+        }
+
+        function startQuiz() {
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('quiz').style.display = 'block';
+            document.getElementById('quizForm').reset();
+            document.getElementById('quizResult').classList.add('hidden');
+        }
+
+        function startFlames() {
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('flames').style.display = 'block';
+            document.getElementById('name1').value = '';
+            document.getElementById('name2').value = '';
+            document.getElementById('flamesResult').classList.add('hidden');
+        }
+
+        function showContact() {
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('flames').style.display = 'none';
+            document.getElementById('contact').style.display = 'block';
+        }
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let score = 0;
+            for (let i = 1; i <= 10; i++) {
+                const answer = document.querySelector(`input[name="q${i}"]:checked`);
+                if (answer) {
+                    score += parseInt(answer.value);
+                }
+            }
+
+            let resultHTML = '';
+            
+            if (score >= 16) {
+                resultHTML = `
+                    <h3>💖 She's Into You! (Score: ${score}/20)</h3>
+                    <p><strong>Great news!</strong> Based on her behavior, there's a strong indication that she has romantic feelings for you.</p>
+                    <p><strong>What to do next:</strong></p>
+                    <ul style="margin-left: 2rem; line-height: 1.8;">
+                        <li>Take the initiative and ask her out on a proper date</li>
+                        <li>Be confident but respectful in expressing your feelings</li>
+                        <li>Create opportunities for one-on-one time together</li>
+                        <li>Pay attention to her responses and reciprocate her interest</li>
+                        <li>Don't wait too long - strike while the iron is hot!</li>
+                    </ul>
+                `;
+            } else if (score >= 11) {
+                resultHTML = `
+                    <h3>💛 There's Potential! (Score: ${score}/20)</h3>
+                    <p><strong>Mixed signals detected.</strong> She might be interested but unsure, or you're in the transition phase between friendship and something more.</p>
+                    <p><strong>What to do next:</strong></p>
+                    <ul style="margin-left: 2rem; line-height: 1.8;">
+                        <li>Spend more quality time together to strengthen your bond</li>
+                        <li>Be more intentional about showing your interest</li>
+                        <li>Create romantic moments and see how she responds</li>
+                        <li>Communicate openly about your feelings when the time feels right</li>
+                        <li>Watch for changes in her behavior - is she warming up or pulling back?</li>
+                    </ul>
+                    <p><strong>Reason for change:</strong> She might need more time to develop feelings, or she's testing the waters to see if you're genuinely interested.</p>
+                `;
+            } else if (score >= 6) {
+                resultHTML = `
+                    <h3>💙 Friend Zone Territory (Score: ${score}/20)</h3>
+                    <p><strong>Be honest with yourself.</strong> She likely sees you as a friend rather than a romantic interest at this point.</p>
+                    <p><strong>What to do next:</strong></p>
+                    <ul style="margin-left: 2rem; line-height: 1.8;">
+                        <li>Accept the friendship and cherish it for what it is</li>
+                        <li>If you want more, try creating romantic tension gradually</li>
+                        <li>Work on yourself - confidence and self-improvement are attractive</li>
+                        <li>Consider if you can handle being just friends, or if you need distance</li>
+                        <li>Don't force it - genuine connections can't be manufactured</li>
+                    </ul>
+                    <p><strong>Important:</strong> Friendships are valuable too. Sometimes the best relationships start as friendships, but don't put your life on hold waiting.</p>
+                `;
+            } else {
+                resultHTML = `
+                    <h3>💔 Not Interested (Score: ${score}/20)</h3>
+                    <p><strong>Time for truth.</strong> Based on these indicators, she doesn't appear to have romantic interest in you.</p>
+                    <p><strong>What to do next:</strong></p>
+                    <ul style="margin-left: 2rem; line-height: 1.8;">
+                        <li>Respect her feelings and don't push for something that isn't there</li>
+                        <li>Give yourself space to process and move on emotionally</li>
+                        <li>Focus on your own growth and happiness</li>
+                        <li>Open yourself up to meeting new people</li>
+                        <li>Remember: The right person will make their interest clear</li>
+                    </ul>
+                    <p><strong>Remember:</strong> This isn't about your worth - it's about compatibility. Someone else will appreciate all the qualities she didn't see.</p>
+                `;
+            }
+
+            document.getElementById('quizResult').innerHTML = resultHTML;
+            document.getElementById('quizResult').classList.remove('hidden');
+            document.getElementById('quizResult').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        function calculateFlames() {
+            const name1 = document.getElementById('name1').value.toLowerCase().replace(/\s/g, '');
+            const name2 = document.getElementById('name2').value.toLowerCase().replace(/\s/g, '');
+
+            if (!name1 || !name2) {
+                alert('Please enter both names!');
+                return;
+            }
+
+            let str1 = name1;
+            let str2 = name2;
+
+            for (let char of str1) {
+                if (str2.includes(char)) {
+                    str1 = str1.replace(char, '');
+                    str2 = str2.replace(char, '');
+                }
+            }
+
+            const count = str1.length + str2.length;
+            const flames = ['Friends', 'Love', 'Affection', 'Marriage', 'Enemy', 'Siblings'];
+            let index = 0;
+
+            while (flames.length > 1) {
+                index = (index + count - 1) % flames.length;
+                flames.splice(index, 1);
+            }
+
+            const result = flames[0];
+            let emoji = '';
+            let description = '';
+
+            switch(result) {
+                case 'Friends':
+                    emoji = '👫';
+                    description = 'You two are destined to be great friends! A strong friendship foundation is valuable.';
+                    break;
+                case 'Love':
+                    emoji = '❤️';
+                    description = 'True love awaits! The stars align for a beautiful romantic relationship.';
+                    break;
+                case 'Affection':
+                    emoji = '💕';
+                    description = 'There\'s mutual affection and care! A sweet and tender connection.';
+                    break;
+                case 'Marriage':
+                    emoji = '💍';
+                    description = 'Wedding bells in the future! This could be the one for life.';
+                    break;
+                case 'Enemy':
+                    emoji = '⚔️';
+                    description = 'Opposites attract... or clash! Passion or conflict, it\'s never boring.';
+                    break;
+                case 'Siblings':
+                    emoji = '👨‍👩‍👧';
+                    description = 'Like family! A bond that\'s comfortable and lasting.';
+                    break;
+            }
+
+            document.getElementById('flamesResult').innerHTML = `
+                <h3 style="text-align: center; font-size: 2rem;">${emoji} ${result} ${emoji}</h3>
+                <p style="text-align: center; font-size: 1.2rem; margin-top: 1rem;">${description}</p>
+                <p style="text-align: center; margin-top: 1rem; color: #888; font-style: italic;">
+                    Remember: FLAMES is just for fun! Real relationships are built on communication, trust, and genuine connection.
+                </p>
+            `;
+            document.getElementById('flamesResult').classList.remove('hidden');
+            document.getElementById('flamesResult').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function submitContact(e) {
+            e.preventDefault();
+            alert('Thank you for your message! We\'ll get back to you soon.');
+            showHome();
+        }
+    </script>
+</body>
+</html>
